@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Frontend\CampaignController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['namespace' => 'Frontend', 'prefix' => 'campaigns'], function () {
+    Route::get('/', [CampaignController::class, 'index'])->name('campaigns.list');
+    Route::get('/create', [CampaignController::class, 'create'])->name('campaigns.create');
+    Route::get('/{campaign}/edit', [CampaignController::class, 'edit'])->name('campaigns.edit');
 });
