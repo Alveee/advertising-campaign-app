@@ -30,6 +30,17 @@ class CampaignService
     }
 
     /**
+     * Get a campaign
+     *
+     * @param  int $id
+     * @return array
+     */
+    public function get($id)
+    {
+        return $this->campaignRepository->get($id)->toArray();
+    }
+
+    /**
      * Upload images & store campaign data
      *
      * @param CreateCampaignRequest $request

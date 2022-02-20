@@ -61,7 +61,15 @@ class CampaignController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            $data = $this->campaignService->get($id);
+            return $this->successResponse($data, 'Campaign retrieved successfully!');
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse('Campaign not found', 404);
+        } catch (Exception $e) {
+            Log::error($e);
+            return $this->errorResponse('Campaign update has been failed', 500);
+        }
     }
 
     /**
