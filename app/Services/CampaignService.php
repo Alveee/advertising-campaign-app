@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Requests\CreateCampaignRequest;
+use App\Http\Requests\UpdateCampaignRequest;
 use App\Repositories\CampaignRepository;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -32,6 +33,30 @@ class CampaignService
     }
 
     /**
+     * update campaign data
+     *
+     * @param  UpdateCampaignRequest $request
+     * @param  integer               $id
+     * @return array
+     */
+    public function updateData(UpdateCampaignRequest $request, int $id): array
+    {
+        $campaign = $this->campaignRepository->get($id);
+        if ($files = $request->file('creative_upload')) {
+            $creative_upload = $this->uploadImage($files);
+        } else {
+            $creative_upload = $campaign->creative_upload;
+        }
+        $data = [...$request->all(), 'creative_upload' => $creative_upload];
+        $updated_campaign = $this->campaignRepository->update($data, $id);
+        if (empty($updated_campaign)) {
+            $old_creative_upload = $campaign->creative_upload;
+            $this->deleteImage($old_creative_upload);
+        }
+        return $updated_campaign;
+    }
+
+    /**
      * Upload images in storage
      *
      * @param  UploadedFile[] $campaign_creatives
@@ -49,5 +74,18 @@ class CampaignService
             ];
         }
         return $uploaded_creatives;
+    }
+
+    /**
+     * Delete images from storage
+     *
+     * @param  array $campaign_creatives
+     * @return void
+     */
+    private function deleteImage(array $campaign_creatives): void
+    {
+        foreach ($campaign_creatives as $value) {
+            Storage::delete('campaigns/' . $value['file_name']);
+        }
     }
 }

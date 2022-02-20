@@ -13,7 +13,7 @@ class UpdateCampaignRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -29,7 +29,7 @@ class UpdateCampaignRequest extends FormRequest
             "end_date" => "required|date_format:Y-m-d",
             "total_budget" => "required|numeric",
             "daily_budget" => "required|numeric",
-            "creative_upload" => "required|array",
+            "creative_upload" => "array",
             "creative_upload.*" => "mimes:jpg,jpeg,png"
         ];
     }
