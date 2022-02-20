@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateCampaignRequest;
+use App\Http\Requests\UpdateCampaignRequest;
 use App\Services\CampaignService;
 use App\Traits\HasApiResponse;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class CampaignController extends Controller
@@ -60,13 +61,21 @@ class CampaignController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  UpdateCampaignRequest  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCampaignRequest $request, $campaign): JsonResponse
     {
-        //
+        try {
+            $data = $this->campaignService->updateData($request, $campaign);
+            return $this->successResponse($data, 'Campaign has been updated successfully');
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse('Campaign not found', 404);
+        } catch (Exception $e) {
+            Log::error($e);
+            return $this->errorResponse('Campaign update has been failed', 500);
+        }
     }
 
     /**
