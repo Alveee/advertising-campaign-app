@@ -25,9 +25,14 @@ class CampaignRepository
         $this->campaign = $campaign;
     }
 
+    /**
+     * Get all campaings
+     *
+     * @return Campaign[]
+     */
     public function getCampaigns()
     {
-        return $this->campaign->all();
+        return $this->campaign->all()->toArray();
     }
 
     /**

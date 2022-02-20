@@ -20,6 +20,16 @@ class CampaignService
     }
 
     /**
+     * Get all campaigns
+     *
+     * @return Campaign[]
+     */
+    public function getAll()
+    {
+        return $this->campaignRepository->getCampaigns();
+    }
+
+    /**
      * Upload images & store campaign data
      *
      * @param CreateCampaignRequest $request

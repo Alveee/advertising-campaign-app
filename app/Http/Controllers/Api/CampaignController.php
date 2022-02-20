@@ -27,7 +27,13 @@ class CampaignController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $data = $this->campaignService->getAll();
+            return $this->successResponse($data, 'All campaigns have been retrieved successfully');
+        } catch (Exception $e) {
+            Log::error($e);
+            return $this->errorResponse('Campaign retrieve has been failed', 500);
+        }
     }
 
     /**
