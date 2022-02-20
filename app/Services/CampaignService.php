@@ -91,7 +91,7 @@ class CampaignService
             Storage::put('campaigns/' . $name, $value->getContent());
             $uploaded_creatives[$key] = [
                 'file_name' => $name,
-                'path' => Storage::url($name)
+                'path' => Storage::url('campaigns/' . $name)
             ];
         }
         return $uploaded_creatives;
